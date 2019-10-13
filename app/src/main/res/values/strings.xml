@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Pengingat Utang Piutang Test</string>
+
+    <string name="reminder_title">Pengingat Utang Piutang</string>
+
+    <string name="editor_update_reminder_successful">Berhasil di update</string>
+
+    <string name="editor_update_reminder_failed">Error, gagal update</string>
+
+    <string name="editor_insert_reminder_successful">Tersimpan</string>
+
+    <string name="editor_insert_reminder_failed">Error, gagal tersimpan</string>
+
+    <string name="editor_delete_reminder_successful">Catatan berhasil deleted</string>
+
+    <string name="editor_delete_reminder_failed">Error, gagal delete</string>
+
+</resources>

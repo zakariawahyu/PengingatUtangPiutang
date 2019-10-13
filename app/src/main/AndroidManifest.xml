@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="org.d3ifcool.pengingatutangpiutangtest">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/logo"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MaterialComponents.Light.Bridge">
+        <activity
+            android:name=".piutang.DetailPiutangLunas"
+            android:label="Detail Piutang Lunas"
+            android:parentActivityName=".piutang.PiutangLunas">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".piutang.PiutangLunas" />
+        </activity>
+        <activity
+            android:name=".piutang.DetailPiutang"
+            android:label="Detail Piutang"
+            android:parentActivityName=".piutang.Piutang">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".piutang.Piutang" />
+        </activity>
+        <activity
+            android:name=".utang.DetailUtangLunas"
+            android:label="Detail Utang Lunas"
+            android:parentActivityName=".utang.UtangLunas">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".utang.UtangLunas" />
+        </activity>
+        <activity
+            android:name=".utang.DetailUtang"
+            android:label="Detail Utang"
+            android:parentActivityName=".utang.Utang">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".utang.Utang" />
+        </activity>
+        <activity
+            android:name=".piutang.PiutangLunas"
+            android:label="Data Piutang Lunas"
+            android:parentActivityName=".piutang.Piutang" />
+        <activity
+            android:name=".utang.UtangLunas"
+            android:label="Data Utang Lunas"
+            android:parentActivityName=".utang.Utang">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".utang.Utang" />
+        </activity>
+        <activity
+            android:name=".About"
+            android:label="About"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Aktivitas"
+            android:label="Aktivitas"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".piutang.TambahPiutang"
+            android:label="Tambah Data Piutang"
+            android:parentActivityName=".piutang.Piutang">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".piutang.Piutang" />
+        </activity>
+        <activity
+            android:name=".utang.TambahUtang"
+            android:label="Tambah Data Utang"
+            android:parentActivityName=".utang.Utang">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".utang.Utang" />
+        </activity>
+        <activity
+            android:name=".piutang.Piutang"
+            android:label="Piutang"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".utang.Utang"
+            android:label="Utang"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity" />
+        </activity>
+        <activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/Theme.AppCompat.NoActionBar" />
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name=".data.UtangPiutangProvider"
+            android:authorities="org.d3ifcool.pengingatutangpiutangtest"
+            android:exported="false" />
+
+        <service
+            android:name=".reminder.ReminderAlarmService"
+            android:exported="false" />
+    </application>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+</manifest>

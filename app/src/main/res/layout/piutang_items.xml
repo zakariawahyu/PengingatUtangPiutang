@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="?android:attr/selectableItemBackground"
+    android:layout_height="wrap_content">
+
+    <ImageView android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/thumbnail_image_piutang"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginTop="4dp"
+        android:padding="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_toRightOf="@id/thumbnail_image_piutang"
+        android:layout_toLeftOf="@+id/active_image_piutang"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/recycle_title_piutang"
+            android:layout_width="match_parent"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimaryDark"
+            tools:text="Title"
+            android:textSize="21sp"/>
+
+
+        <TextView
+            android:id="@+id/recycle_deskripsi_piutang"
+            android:layout_width="match_parent"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/colorPrimaryDark"
+            tools:text="Makan"/>
+
+        <TextView
+            android:id="@+id/recycle_date_time_piutang"
+            android:layout_width="match_parent"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/colorPrimaryDark"
+            tools:text="Date and Time"/>
+
+        <TextView
+            android:id="@+id/recycle_repeat_info_piutang"
+            android:layout_width="match_parent"
+            android:ellipsize="marquee"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/colorPrimaryDark"
+            tools:text="Repeat No and Type"/>
+
+    </LinearLayout>
+
+    <ImageView android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:src="@drawable/ic_notifications_off_black_24dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/active_image_piutang"/>
+
+</RelativeLayout>

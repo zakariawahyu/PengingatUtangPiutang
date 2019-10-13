@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name='Pengingat Utang Piutang Test'
