@@ -173,14 +173,14 @@ public class TambahPiutang extends AppCompatActivity implements TimePickerDialog
                     String originalString = s.toString();
                     originalString = originalString.replaceAll("\\.", "").replaceFirst(",", ".");
                     originalString = originalString.replaceAll("[A-Z]", "").replaceAll("[a-z]", "");
-                    double doubleval = Double.parseDouble(originalString);
+                    int doubleval = Integer.parseInt(originalString);
                     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
                     symbols.setDecimalSeparator(',');
                     symbols.setGroupingSeparator('.');
-                    String pattern = "#,###,###,###";
+                    String pattern = "#,###,###";
                     DecimalFormat formatter = new DecimalFormat(pattern, symbols);
                     String formattedString = formatter.format(doubleval);
-                    mJum = formattedString;
+                    mJum = formattedString.replace(".","");;
                     mJumlahText.setText(formattedString);
                     mJumlahText.setSelection(mJumlahText.getText().length());
                 } catch (NumberFormatException nfe) {

@@ -94,6 +94,40 @@
                 android:layout_marginTop="10dp"
                 android:text="Tania Angelina Hutajulu \n Analis"
                 android:textAlignment="center" />
+
+            <TextView
+                android:id="@+id/tv_v"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:text="Special Thanks"
+                android:layout_below="@+id/tv_tania"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_vv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="©2019 All rights reserved Roundicons.com"
+                android:layout_below="@+id/tv_v"
+                android:textAlignment="center"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_vvv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Delaroy Studios"
+                android:layout_below="@+id/tv_vv"
+                android:textAlignment="center"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="15dp"/>
         </RelativeLayout>
     </ScrollView>
 

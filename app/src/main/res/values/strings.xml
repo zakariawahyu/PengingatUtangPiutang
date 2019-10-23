@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Pengingat Utang Piutang Test</string>
 
+    <string name="db">PengingatUtangPiutang DB</string>
+
     <string name="reminder_title">Pengingat Utang Piutang</string>
 
     <string name="editor_update_reminder_successful">Berhasil di update</string>

@@ -42,6 +42,7 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
     private String mJum;
     private String mSat = "Belum Lunas";
     private int id;
+    private String formattedString;
 
 
     private static final int EXISTING_UTANG_LOADER = 0;
@@ -91,11 +92,11 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
                     DecimalFormatSymbols symbols = new DecimalFormatSymbols();
                     symbols.setDecimalSeparator(',');
                     symbols.setGroupingSeparator('.');
-                    String pattern = "###,###.##";
+                    String pattern = "#,###,###";
                     DecimalFormat formatter = new DecimalFormat(pattern, symbols);
-                    String formattedString = formatter.format(doubleval);
-                    mJum = formattedString;
-                    etJumlahBayar.setText(formattedString);
+                    String formattedStringku = formatter.format(doubleval);
+                    mJum = formattedStringku.replace(".","");;
+                    etJumlahBayar.setText(formattedStringku);
                     etJumlahBayar.setSelection(etJumlahBayar.getText().length());
                 } catch (NumberFormatException nfe) {
                     nfe.printStackTrace();
@@ -116,7 +117,7 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
         btnLunasPiutang.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
         mCatatanPiutang.setText("Pinjaman ini dibayar dengan cara cicilan");
         etJumlahBayar.setText("");
-        mJumlahSisa.setText("Rp " + jumlah + "");
+        mJumlahSisa.setText("Rp " + formattedString + "");
         mStatus.setText("Belum Lunas");
         mSat = "Belum Lunas";
     }
@@ -136,8 +137,8 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
             mJum = etJumlahBayar.getText().toString().replace(".", "");
             String totmah = jumlah.trim().replace(".", "");
 
-            double etjum = Double.parseDouble(mJum);
-            double totjum = Double.parseDouble(totmah);
+            int etjum = Integer.parseInt(mJum);
+            int totjum = Integer.parseInt(totmah);
 
             if (etjum > totjum) {
                 Toast.makeText(DetailPiutang.this, "Jumlah tidak boleh melebihi jumlah utang", Toast.LENGTH_SHORT).show();
@@ -152,26 +153,15 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
     }
 
     public void bayarUtangku() {
-        String coba2 = jumlah.trim().replace(".", "");
-        String coba = mJum.trim().replace(".", "");
-        double mJumku = Double.parseDouble(coba);
-        double jumlahku = Double.parseDouble(coba2);
 
-        double bayarku = jumlahku - mJumku;
+        int mJumku = Integer.parseInt(mJum);
+        int jumlahku = Integer.parseInt(jumlah);
 
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator(',');
-        symbols.setGroupingSeparator('.');
-        String pattern = "###,###.##";
-        DecimalFormat formatter = new DecimalFormat(pattern, symbols);
-        String formattedString = formatter.format(bayarku);
-        String bayar = formattedString;
-
+        int bayarku = jumlahku - mJumku;
 
         ContentValues values = new ContentValues();
 
-
-        values.put(UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH, bayar);
+        values.put(UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH, bayarku);
         values.put(UtangPiutangContract.UtangPiutangEntry.KEY_STATUS, mSat);
 
         int rowsAffected = getContentResolver().update(mCurrentPiutangUri, values, null, null);
@@ -336,7 +326,14 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
             String tanggal = cursor.getString(tanggalColumnIndex);
             String status = cursor.getString(statusColumnIndex);
 
-            String jumlahUtang = "Rp " + jumlah + "";
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator(',');
+            symbols.setGroupingSeparator('.');
+            String pattern = "#,###,###";
+            DecimalFormat formatter = new DecimalFormat(pattern, symbols);
+            formattedString = formatter.format(Double.parseDouble(jumlah));
+
+            String jumlahUtang = "Rp " + formattedString + "";
             mJumlah.setText(jumlahUtang);
             mJumlahSisa.setText(jumlahUtang);
             mNama.setText(nama);

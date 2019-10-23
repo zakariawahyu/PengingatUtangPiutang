@@ -13,6 +13,8 @@ public class UtangPiutangContract {
 
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
+    public static final String PATH_AKTIVITAS = "aktivitas";
+
     public static final String PATH_UTANG = "utang";
     public static final String PATH_UTANG_LUNAS = "utanglunas";
 
@@ -21,6 +23,8 @@ public class UtangPiutangContract {
 
     public static final class UtangPiutangEntry implements BaseColumns {
 
+        public static final Uri CONTENT_URI_AKTIVITAS = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_AKTIVITAS);
+
         public static final Uri CONTENT_URI_UTANG = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_UTANG);
 
         public static final Uri CONTENT_URI_UTANG_LUNAS = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_UTANG_LUNAS);
@@ -28,6 +32,12 @@ public class UtangPiutangContract {
         public static final Uri CONTENT_URI_PIUTANG = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PIUTANG);
 
         public static final Uri CONTENT_URI_PIUTANG_LUNAS = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_PIUTANG_LUNAS);
+
+        public static final String CONTENT_LIST_TYPE_AKTIVITAS =
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_AKTIVITAS;
+
+        public static final String CONTENT_ITEM_TYPE_AKTIVITAS =
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_AKTIVITAS;
 
         public static final String CONTENT_LIST_TYPE_UTANG =
                 ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_UTANG;

@@ -16,6 +16,10 @@ public class UtangPiutangProvider extends ContentProvider {
 
     public static final String LOG_TAG = UtangPiutangProvider.class.getSimpleName();
 
+    private static final int AKTIVITAS = 100;
+
+    private static final int AKTIVITAS_ID = 101;
+
     private static final int UTANG = 200;
 
     private static final int UTANG_ID = 201;
@@ -36,6 +40,9 @@ public class UtangPiutangProvider extends ContentProvider {
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
+        sUriMatcher.addURI(UtangPiutangContract.CONTENT_AUTHORITY, UtangPiutangContract.PATH_AKTIVITAS, AKTIVITAS);
+
+        sUriMatcher.addURI(UtangPiutangContract.CONTENT_AUTHORITY, UtangPiutangContract.PATH_AKTIVITAS + "/#", AKTIVITAS_ID);
 
         sUriMatcher.addURI(UtangPiutangContract.CONTENT_AUTHORITY, UtangPiutangContract.PATH_UTANG, UTANG);
 
@@ -72,6 +79,17 @@ public class UtangPiutangProvider extends ContentProvider {
 
         int match = sUriMatcher.match(uri);
         switch (match) {
+            case AKTIVITAS:
+                cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
+            case AKTIVITAS_ID:
+                selection = UtangPiutangContract.UtangPiutangEntry._ID + "=?";
+                selectionArgs = new String[] { String.valueOf(ContentUris.parseId(uri)) };
+
+                cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
+                        null, null, sortOrder);
+                break;
             case UTANG:
                 selection = UtangPiutangContract.UtangPiutangEntry.KEY_STATUS +"= 'Belum Lunas'" + " AND " + UtangPiutangContract.UtangPiutangEntry.KEY_JENIS +"= 'Utang'";
                 cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
@@ -134,6 +152,10 @@ public class UtangPiutangProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
+            case AKTIVITAS:
+                return UtangPiutangContract.UtangPiutangEntry.CONTENT_LIST_TYPE_AKTIVITAS;
+            case AKTIVITAS_ID:
+                return UtangPiutangContract.UtangPiutangEntry.CONTENT_ITEM_TYPE_AKTIVITAS;
             case UTANG:
                 return UtangPiutangContract.UtangPiutangEntry.CONTENT_LIST_TYPE_UTANG;
             case UTANG_ID:
@@ -163,13 +185,7 @@ public class UtangPiutangProvider extends ContentProvider {
             case UTANG:
                 return insertUtang(uri, contentValues);
 
-            case UTANG_LUNAS:
-                return insertUtang(uri, contentValues);
-
             case PIUTANG:
-                return insertUtang(uri, contentValues);
-
-            case PIUTANG_LUNAS:
                 return insertUtang(uri, contentValues);
 
             default:

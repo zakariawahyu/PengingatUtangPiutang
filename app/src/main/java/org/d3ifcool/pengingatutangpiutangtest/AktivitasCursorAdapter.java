@@ -1,4 +1,4 @@
-package org.d3ifcool.pengingatutangpiutangtest.piutang;
+package org.d3ifcool.pengingatutangpiutangtest;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -12,35 +12,33 @@ import android.widget.TextView;
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
 
-import org.d3ifcool.pengingatutangpiutangtest.R;
 import org.d3ifcool.pengingatutangpiutangtest.data.UtangPiutangContract;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+public class AktivitasCursorAdapter extends CursorAdapter {
 
-public class PiutangCursorAdapter extends CursorAdapter {
-    private TextView mTitleText, mDateAndTimeText, mRepeatInfoText, mDeskripsiText;
+    private TextView mTitleText, mDateAndTimeText, mRepeatInfoText, mDeskripsiText, mJenisText, mStatusText;
     private ImageView mActiveImage, mThumbnailImage;
     private ColorGenerator mColorGenerator = ColorGenerator.DEFAULT;
     private TextDrawable mDrawableBuilder;
 
-    public PiutangCursorAdapter(Context context, Cursor c) {
+    public AktivitasCursorAdapter(Context context, Cursor c) {
         super(context, c, 0 /* flags */);
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.piutang_items, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.activity_items_utangpiutang, parent, false);
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        mDeskripsiText = (TextView) view.findViewById(R.id.recycle_deskripsi_piutang);
-        mTitleText = (TextView) view.findViewById(R.id.recycle_title_piutang);
-        mDateAndTimeText = (TextView) view.findViewById(R.id.recycle_date_time_piutang);
-        mRepeatInfoText = (TextView) view.findViewById(R.id.recycle_repeat_info_piutang);
-        mActiveImage = (ImageView) view.findViewById(R.id.active_image_piutang);
-        mThumbnailImage = (ImageView) view.findViewById(R.id.thumbnail_image_piutang);
+        mDeskripsiText = (TextView) view.findViewById(R.id.recycle_deskripsi);
+        mTitleText = (TextView) view.findViewById(R.id.recycle_title);
+        mDateAndTimeText = (TextView) view.findViewById(R.id.recycle_date_time);
+        mRepeatInfoText = (TextView) view.findViewById(R.id.recycle_repeat_info);
+        mThumbnailImage = (ImageView) view.findViewById(R.id.thumbnail_image);
+        mJenisText = (TextView) view.findViewById(R.id.tv_jenis);
+        mStatusText =(TextView) view.findViewById(R.id.tv_status);
 
         int titleColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_NAMA);
         int jumlahColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH);
@@ -50,7 +48,8 @@ public class PiutangCursorAdapter extends CursorAdapter {
         int repeatColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT);
         int repeatNoColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_NO);
         int repeatTypeColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_TYPE);
-        int activeColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_ACTIVE);
+        int jenisColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_JENIS);
+        int statusColumnIndex = cursor.getColumnIndex(UtangPiutangContract.UtangPiutangEntry.KEY_STATUS);
 
         String title = cursor.getString(titleColumnIndex);
         String jumlah = cursor.getString(jumlahColumnIndex);
@@ -60,25 +59,19 @@ public class PiutangCursorAdapter extends CursorAdapter {
         String repeat = cursor.getString(repeatColumnIndex);
         String repeatNo = cursor.getString(repeatNoColumnIndex);
         String repeatType = cursor.getString(repeatTypeColumnIndex);
-        String active = cursor.getString(activeColumnIndex);
-
-        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
-        symbols.setDecimalSeparator(',');
-        symbols.setGroupingSeparator('.');
-        String pattern = "#,###,###";
-        DecimalFormat formatter = new DecimalFormat(pattern, symbols);
-        String formattedString = formatter.format(Double.parseDouble(jumlah));
+        String jenis = cursor.getString(jenisColumnIndex).toUpperCase();
+        String status = cursor.getString(statusColumnIndex).toUpperCase();
 
         String dateTime = date + " " + time;
-        String titleku = title + " " + "(Rp" + " " + formattedString + ")";
+        String titleku = title + " " + "(Rp." + " " + jumlah + ")";
 
         setReminderTitle(titleku);
         setReminderDateTime(dateTime);
         setReminderRepeatInfo(repeat, repeatNo, repeatType);
-        setActiveImage(active);
         setDeskripsi(deskripsi);
+        setJenis(jenis);
+        setStatus(status);
     }
-
     // Set reminder title view
     public void setReminderTitle(String title) {
         mTitleText.setText(title);
@@ -101,6 +94,14 @@ public class PiutangCursorAdapter extends CursorAdapter {
         mDateAndTimeText.setText(datetime);
     }
 
+    public void setJenis(String jenis) {
+        mJenisText.setText(jenis);
+    }
+
+    public void setStatus(String status) {
+        mStatusText.setText(status);
+    }
+
 
     public void setDeskripsi(String deskripsi) {
         mDeskripsiText.setText(deskripsi);
@@ -112,15 +113,6 @@ public class PiutangCursorAdapter extends CursorAdapter {
             mRepeatInfoText.setText("Every " + repeatNo + " " + repeatType + "(s)");
         } else if (repeat.equals("false")) {
             mRepeatInfoText.setText("Repeat Off");
-        }
-    }
-
-    // Set active image as on or off
-    public void setActiveImage(String active) {
-        if (active.equals("true")) {
-            mActiveImage.setImageResource(R.drawable.ic_notifications_active_black_24dp);
-        } else if (active.equals("false")) {
-            mActiveImage.setImageResource(R.drawable.ic_notifications_off_black_24dp);
         }
     }
 }
