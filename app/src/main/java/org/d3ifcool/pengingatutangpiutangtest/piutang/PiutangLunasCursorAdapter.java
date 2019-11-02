@@ -68,7 +68,7 @@ public class PiutangLunasCursorAdapter extends CursorAdapter {
         String formattedString = formatter.format(Double.parseDouble(jumlah));
 
         String dateTime = date + " " + time;
-        String titleku = title + " " + "(Rp." + " " + formattedString + ")";
+        String titleku = title + " " + "(Rp" + " " + formattedString + ")";
 
         setReminderTitle(titleku);
         setReminderDateTime(dateTime);

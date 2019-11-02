@@ -14,6 +14,9 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 
 import org.d3ifcool.pengingatutangpiutangtest.data.UtangPiutangContract;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 public class AktivitasCursorAdapter extends CursorAdapter {
 
     private TextView mTitleText, mDateAndTimeText, mRepeatInfoText, mDeskripsiText, mJenisText, mStatusText;
@@ -62,8 +65,15 @@ public class AktivitasCursorAdapter extends CursorAdapter {
         String jenis = cursor.getString(jenisColumnIndex).toUpperCase();
         String status = cursor.getString(statusColumnIndex).toUpperCase();
 
+        DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+        symbols.setDecimalSeparator(',');
+        symbols.setGroupingSeparator('.');
+        String pattern = "#,###,###";
+        DecimalFormat formatter = new DecimalFormat(pattern, symbols);
+        String formattedString = formatter.format(Integer.parseInt(jumlah));
+
         String dateTime = date + " " + time;
-        String titleku = title + " " + "(Rp." + " " + jumlah + ")";
+        String titleku = title + " " + "(Rp" + " " + formattedString + ")";
 
         setReminderTitle(titleku);
         setReminderDateTime(dateTime);

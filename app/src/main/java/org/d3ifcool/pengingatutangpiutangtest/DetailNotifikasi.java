@@ -1,14 +1,10 @@
-package org.d3ifcool.pengingatutangpiutangtest.piutang;
+package org.d3ifcool.pengingatutangpiutangtest;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NavUtils;
 
-import android.app.AlertDialog;
 import android.app.LoaderManager;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
@@ -16,28 +12,23 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.d3ifcool.pengingatutangpiutangtest.R;
 import org.d3ifcool.pengingatutangpiutangtest.data.UtangPiutangContract;
-import org.d3ifcool.pengingatutangpiutangtest.reminder.AlarmScheduler;
-import org.d3ifcool.pengingatutangpiutangtest.utang.DetailUtang;
-import org.d3ifcool.pengingatutangpiutangtest.utang.TambahUtang;
+import org.d3ifcool.pengingatutangpiutangtest.piutang.DetailPiutang;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
-public class DetailPiutang extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private boolean mPiutangHasChanged;
-    private Uri mCurrentPiutangUri;
-    private TextView mJumlah, mJumlahSisa, mCatatanPiutang, mNama, mDeskripsi, mTanggal, mStatus;
-    private Button btnCicilPiutang, btnLunasPiutang, btnBayarPiutang;
+public class DetailNotifikasi extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+    private boolean mNotifikasiHasChanged;
+    private Uri mCurrentNotifikasiUri;
+    private TextView mJumlah, mJumlahSisa, mCatatan, mNama, mDeskripsi, mTanggal, mStatus;
+    private Button btnCicil, btnLunas, btnBayar;
     private EditText etJumlahBayar;
     private String jumlah;
     private String mJum;
@@ -45,36 +36,36 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
     private int id;
     private String formattedString;
 
+    private static final int EXISTING_NOTIFIKASI_LOADER = 0;
 
-    private static final int EXISTING_PIUTANG_LOADER = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail_piutang);
+        setContentView(R.layout.activity_detail_notifikasi);
 
         Intent intent = getIntent();
-        mCurrentPiutangUri = intent.getData();
+        mCurrentNotifikasiUri = intent.getData();
 
-        if (mCurrentPiutangUri == null) {
-            mPiutangHasChanged = true;
+        if (mCurrentNotifikasiUri == null) {
+            mNotifikasiHasChanged = true;
 
         } else {
 
-            mPiutangHasChanged = false;
-            getLoaderManager().initLoader(EXISTING_PIUTANG_LOADER, null, this);
+            mNotifikasiHasChanged = false;
+            getLoaderManager().initLoader(EXISTING_NOTIFIKASI_LOADER, null, this);
         }
 
-        mJumlah = findViewById(R.id.tv_jumlah_detail_piutang);
-        mJumlahSisa = findViewById(R.id.tv_jumlahsisa_detail_piutang);
-        btnCicilPiutang = findViewById(R.id.btn_cicil_piutang);
-        btnLunasPiutang = findViewById(R.id.btn_lunas_piutang);
-        etJumlahBayar = findViewById(R.id.et_jumlahbayar_piutang);
-        btnBayarPiutang = findViewById(R.id.btn_bayar_piutang);
-        mCatatanPiutang = findViewById(R.id.tv_catatan_piutang);
-        mNama = findViewById(R.id.tv_nama_detail_piutang);
-        mDeskripsi = findViewById(R.id.tv_deskirpsi_detail_piutang);
-        mTanggal = findViewById(R.id.tv_tanggal_detail_piutang);
-        mStatus = findViewById(R.id.tv_status_detail_piutang);
+        mJumlah = findViewById(R.id.tv_jumlah_detail_notifikasi);
+        mJumlahSisa = findViewById(R.id.tv_jumlahsisa_detail_notifikasi);
+        btnCicil = findViewById(R.id.btn_cicil_notifikasi);
+        btnLunas = findViewById(R.id.btn_lunas_notifikasi);
+        etJumlahBayar = findViewById(R.id.et_jumlahbayar_notifikasi);
+        btnBayar = findViewById(R.id.btn_bayar_notifikasi);
+        mCatatan = findViewById(R.id.tv_catatan_notifikasi);
+        mNama = findViewById(R.id.tv_nama_detail_notifikasi);
+        mDeskripsi = findViewById(R.id.tv_deskirpsi_detail_notifikasi);
+        mTanggal = findViewById(R.id.tv_tanggal_detail_notifikasi);
+        mStatus = findViewById(R.id.tv_status_detail_notifiikasi);
 
         etJumlahBayar.addTextChangedListener(new TextWatcher() {
             @Override
@@ -113,40 +104,40 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
         });
     }
 
-    public void btnCicilPiutang(View view) {
-        btnCicilPiutang.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
-        btnLunasPiutang.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
-        mCatatanPiutang.setText("Pinjaman ini dibayar dengan cara cicilan");
+    public void btnCicil(View view) {
+        btnCicil.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
+        btnLunas.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
+        mCatatan.setText("Pinjaman ini dibayar dengan cara cicilan");
         etJumlahBayar.setText("");
         mJumlahSisa.setText("Rp " + formattedString + "");
         mStatus.setText("Belum Lunas");
         mSat = "Belum Lunas";
     }
 
-    public void btnLunasPiutang(View view) {
-        btnLunasPiutang.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
-        btnCicilPiutang.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
-        mCatatanPiutang.setText("Pinjaman ini dibayar dengan cara lunas");
+    public void btnLunas(View view) {
+        btnLunas.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
+        btnCicil.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
+        mCatatan.setText("Pinjaman ini dibayar dengan cara lunas");
         mJumlahSisa.setText("Rp 0");
         etJumlahBayar.setText(jumlah);
         mStatus.setText("Lunas");
         mSat = "Lunas";
     }
 
-    public void bayarPiutang(View view) {
+    public void bayarNotifikasi(View view) {
         try {
 
             int etjum = Integer.parseInt(mJum);
             int totjum = Integer.parseInt(jumlah);
 
             if (etjum > totjum) {
-                Toast.makeText(DetailPiutang.this, "Jumlah tidak boleh melebihi jumlah utang", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DetailNotifikasi.this, "Jumlah tidak boleh melebihi jumlah utang", Toast.LENGTH_SHORT).show();
             } else {
                 bayarPiutangku();
             }
 
         } catch (NumberFormatException e) {
-            Toast.makeText(DetailPiutang.this, "Jumlah tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DetailNotifikasi.this, "Jumlah tidak boleh kosong", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -163,7 +154,7 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
         values.put(UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH, bayarku);
         values.put(UtangPiutangContract.UtangPiutangEntry.KEY_STATUS, mSat);
 
-        int rowsAffected = getContentResolver().update(mCurrentPiutangUri, values, null, null);
+        int rowsAffected = getContentResolver().update(mCurrentNotifikasiUri, values, null, null);
 
         // Show a toast message depending on whether or not the update was successful.
         if (rowsAffected == 0) {
@@ -180,102 +171,12 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
 
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_detail, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent i;
-        switch (item.getItemId()) {
-            case R.id.edit:
-                i = new Intent(DetailPiutang.this, TambahPiutang.class);
-
-                Uri currentPiutangkuUri = ContentUris.withAppendedId(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, id);
-
-                // Set the URI on the data field of the intent
-                i.setData(currentPiutangkuUri);
-                startActivity(i);
-                return true;
-
-            case R.id.delete:
-
-                showDeleteConfirmationDialog();
-
-                return true;
-
-            case android.R.id.home:
-                // If the reminder hasn't changed, continue with navigating up to parent activity
-                // which is the {@link MainActivity}.
-                if (!mPiutangHasChanged) {
-                    NavUtils.navigateUpFromSameTask(DetailPiutang.this);
-                    return true;
-                }
-        }
-        return true;
-    }
-
-    private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Delete catatan ini ?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the reminder.
-                deleteReminder();
-            }
-        });
-        builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the reminder.
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void deleteReminder() {
-        // Only perform the delete if this is an existing reminder.
-        if (mCurrentPiutangUri != null) {
-            // Call the ContentResolver to delete the reminder at the given content URI.
-            // Pass in null for the selection and selection args because the mCurrentreminderUri
-            // content URI already identifies the reminder that we want.
-            int rowsDeleted = getContentResolver().delete(mCurrentPiutangUri, null, null);
-
-            new AlarmScheduler().cancelAlarm(getApplicationContext(), mCurrentPiutangUri);
-
-            // Show a toast message depending on whether or not the delete was successful.
-            if (rowsDeleted == 0) {
-                // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.editor_delete_reminder_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_delete_reminder_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        // Close the activity
-        finish();
-    }
-
     // On pressing the back button
     @Override
     public void onBackPressed() {
         super.onBackPressed();
 
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -296,7 +197,7 @@ public class DetailPiutang extends AppCompatActivity implements LoaderManager.Lo
 
         // This loader will execute the ContentProvider's query method on a background thread
         return new CursorLoader(this,   // Parent activity context
-                mCurrentPiutangUri,         // Query the content URI for the current reminder
+                mCurrentNotifikasiUri,         // Query the content URI for the current reminder
                 projection,             // Columns to include in the resulting Cursor
                 null,                   // No selection clause
                 null,                   // No selection arguments

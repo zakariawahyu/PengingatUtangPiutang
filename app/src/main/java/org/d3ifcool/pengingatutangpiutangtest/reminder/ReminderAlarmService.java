@@ -9,12 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import androidx.annotation.Nullable;
-import androidx.core.app.NotificationCompat;
+import android.provider.Settings;
 
+import androidx.core.app.NotificationCompat;
 
 import org.d3ifcool.pengingatutangpiutangtest.R;
 import org.d3ifcool.pengingatutangpiutangtest.data.UtangPiutangContract;
+import org.d3ifcool.pengingatutangpiutangtest.piutang.DetailPiutang;
+import org.d3ifcool.pengingatutangpiutangtest.utang.DetailUtang;
 import org.d3ifcool.pengingatutangpiutangtest.utang.TambahUtang;
 
 public class ReminderAlarmService extends IntentService {
@@ -23,6 +25,8 @@ public class ReminderAlarmService extends IntentService {
     private static final int NOTIFICATION_ID = 42;
 
     Cursor cursor;
+    private String description;
+
     //This is a deep link intent, and needs the task stack
     public static PendingIntent getReminderPendingIntent(Context context, Uri uri) {
         Intent action = new Intent(context, ReminderAlarmService.class);
@@ -35,39 +39,41 @@ public class ReminderAlarmService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    protected void onHandleIntent(Intent intent) {
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Uri uri = intent.getData();
 
         //Display a notification to view the task details
-        Intent action = new Intent(this, TambahUtang.class);
+        Intent action = new Intent(this, DetailUtang.class);
         action.setData(uri);
         PendingIntent operation = TaskStackBuilder.create(this)
                 .addNextIntentWithParentStack(action)
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //Grab the task description
-        if(uri != null){
+        if (uri != null) {
             cursor = getContentResolver().query(uri, null, null, null, null);
         }
+            String description = "";
+            try {
+                if (cursor != null && cursor.moveToFirst()) {
+                    description = UtangPiutangContract.getColumnString(cursor, UtangPiutangContract.UtangPiutangEntry.KEY_NAMA);
+                }
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
 
-        String description = "";
-        try {
-            if (cursor != null && cursor.moveToFirst()) {
-                description = UtangPiutangContract.getColumnString(cursor, UtangPiutangContract.UtangPiutangEntry.KEY_NAMA);
-            }
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
+
 
         Notification note = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.reminder_title))
                 .setContentText(description)
                 .setSmallIcon(R.drawable.ic_add_alert_black_24dp)
                 .setContentIntent(operation)
+                .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                 .setAutoCancel(true)
                 .build();
 

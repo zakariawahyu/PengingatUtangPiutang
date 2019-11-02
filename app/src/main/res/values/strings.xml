@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Pengingat Utang Piutang Test</string>
 
-    <string name="db">PengingatUtangPiutang DB</string>
+    <string name="db">DBUtangPiutang</string>
 
     <string name="reminder_title">Pengingat Utang Piutang</string>
 

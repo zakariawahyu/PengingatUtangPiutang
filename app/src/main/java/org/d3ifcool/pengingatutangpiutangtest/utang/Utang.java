@@ -30,7 +30,7 @@ public class Utang extends AppCompatActivity implements LoaderManager.LoaderCall
     ListView listViewUtang;
     UtangCursorAdapter mCursorAdapter;
 
-    private static final int UTANG_LOADER = 0;
+    public static final int UTANG_LOADER = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

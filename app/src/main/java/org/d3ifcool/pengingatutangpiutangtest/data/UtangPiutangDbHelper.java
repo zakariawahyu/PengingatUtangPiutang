@@ -28,17 +28,17 @@ public class UtangPiutangDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String SQL_CREATE_UTANGPIUTANG_TABLE =  "CREATE TABLE " + UtangPiutangContract.UtangPiutangEntry.TABLE_NAME + " ("
                 + UtangPiutangContract.UtangPiutangEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_NAMA + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_DESKRIPSI + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_DATE + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_TIME + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_NO + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_TYPE + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_ACTIVE + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_JENIS + " TEXT NOT NULL, "
-                + UtangPiutangContract.UtangPiutangEntry.KEY_STATUS + " TEXT NOT NULL "+  " );";
+                + UtangPiutangContract.UtangPiutangEntry.KEY_NAMA + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_DESKRIPSI + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_DATE + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_TIME + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_NO + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_TYPE + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_ACTIVE + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_JENIS + " TEXT, "
+                + UtangPiutangContract.UtangPiutangEntry.KEY_STATUS + " TEXT " + " );";
 
         // Execute the SQL statement
         db.execSQL(SQL_CREATE_UTANGPIUTANG_TABLE);
@@ -50,9 +50,6 @@ public class UtangPiutangDbHelper extends SQLiteOpenHelper {
 
     }
 
-    public static int getDatabaseVersion() {
-        return DATABASE_VERSION;
-    }
 
     public void backup(String outFileName) {
 

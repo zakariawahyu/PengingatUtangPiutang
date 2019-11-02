@@ -68,7 +68,7 @@ public class UtangCursorAdapter extends CursorAdapter {
         symbols.setGroupingSeparator('.');
         String pattern = "#,###,###";
         DecimalFormat formatter = new DecimalFormat(pattern, symbols);
-        String formattedString = formatter.format(Double.parseDouble(jumlah));
+        String formattedString = formatter.format(Integer.parseInt(jumlah));
 
         String dateTime = date + " " + time;
         String titleku = title + " " + "(Rp" + " " + formattedString + ")";

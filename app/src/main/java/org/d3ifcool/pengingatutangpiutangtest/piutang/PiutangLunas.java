@@ -24,7 +24,7 @@ public class PiutangLunas extends AppCompatActivity implements LoaderManager.Loa
 
     ListView listViewPiutangLunas;
     View emptyViewPiutangLunas;
-    UtangLunasCursorAdapter mCursorAdapterPiutangLunas;
+    PiutangLunasCursorAdapter mCursorAdapterPiutangLunas;
 
     private static final int PIUTANGLUNAS_LOADER = 0;
 
@@ -37,18 +37,18 @@ public class PiutangLunas extends AppCompatActivity implements LoaderManager.Loa
         emptyViewPiutangLunas = findViewById(R.id.empty_view_piutanglunas);
         listViewPiutangLunas.setEmptyView(emptyViewPiutangLunas);
 
-        mCursorAdapterPiutangLunas = new UtangLunasCursorAdapter(this, null);
+        mCursorAdapterPiutangLunas = new PiutangLunasCursorAdapter(this, null);
         listViewPiutangLunas.setAdapter(mCursorAdapterPiutangLunas);
 
         listViewPiutangLunas.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(PiutangLunas.this, DetailUtangLunas.class);
+                Intent intent = new Intent(PiutangLunas.this, DetailPiutangLunas.class);
 
-                Uri currentUtangkuUri = ContentUris.withAppendedId(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, id);
+                Uri currentPiutangkuUri = ContentUris.withAppendedId(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, id);
 
                 // Set the URI on the data field of the intent
-                intent.setData(currentUtangkuUri);
+                intent.setData(currentPiutangkuUri);
 
                 startActivity(intent);
             }

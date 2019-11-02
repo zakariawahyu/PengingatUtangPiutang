@@ -52,10 +52,10 @@ public class Piutang extends AppCompatActivity implements LoaderManager.LoaderCa
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(Piutang.this, DetailPiutang.class);
 
-                Uri currentUtangkuUri = ContentUris.withAppendedId(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, id);
+                Uri currentPiutangkuUri = ContentUris.withAppendedId(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, id);
 
                 // Set the URI on the data field of the intent
-                intent.setData(currentUtangkuUri);
+                intent.setData(currentPiutangkuUri);
 
                 startActivity(intent);
             }
@@ -95,6 +95,7 @@ public class Piutang extends AppCompatActivity implements LoaderManager.LoaderCa
                     NavUtils.navigateUpFromSameTask(Piutang.this);
                     return true;
                 }
+                break;
         }
         return true;
     }

@@ -80,6 +80,7 @@ public class UtangPiutangProvider extends ContentProvider {
         int match = sUriMatcher.match(uri);
         switch (match) {
             case AKTIVITAS:
+                sortOrder = "_id DESC";
                 cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
@@ -91,6 +92,7 @@ public class UtangPiutangProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             case UTANG:
+                sortOrder = "_id DESC";
                 selection = UtangPiutangContract.UtangPiutangEntry.KEY_STATUS +"= 'Belum Lunas'" + " AND " + UtangPiutangContract.UtangPiutangEntry.KEY_JENIS +"= 'Utang'";
                 cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -103,6 +105,7 @@ public class UtangPiutangProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             case UTANG_LUNAS:
+                sortOrder = "_id DESC";
                 selection = UtangPiutangContract.UtangPiutangEntry.KEY_STATUS +"= 'Lunas'" + " AND " + UtangPiutangContract.UtangPiutangEntry.KEY_JENIS +"= 'Utang'";
                 cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -115,6 +118,7 @@ public class UtangPiutangProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             case PIUTANG:
+                sortOrder = "_id DESC";
                 selection = UtangPiutangContract.UtangPiutangEntry.KEY_STATUS +"= 'Belum Lunas'" + " AND " + UtangPiutangContract.UtangPiutangEntry.KEY_JENIS +"= 'Piutang'";
                 cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -127,6 +131,7 @@ public class UtangPiutangProvider extends ContentProvider {
                         null, null, sortOrder);
                 break;
             case PIUTANG_LUNAS:
+                sortOrder = "_id DESC";
                 selection = UtangPiutangContract.UtangPiutangEntry.KEY_STATUS +"= 'Lunas'" + " AND " + UtangPiutangContract.UtangPiutangEntry.KEY_JENIS +"= 'Piutang'";
                 cursor = database.query(UtangPiutangContract.UtangPiutangEntry.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
@@ -204,7 +209,9 @@ public class UtangPiutangProvider extends ContentProvider {
             return null;
         }
 
-        getContext().getContentResolver().notifyChange(uri, null);
+        if (id != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
 
         return ContentUris.withAppendedId(uri, id);
     }

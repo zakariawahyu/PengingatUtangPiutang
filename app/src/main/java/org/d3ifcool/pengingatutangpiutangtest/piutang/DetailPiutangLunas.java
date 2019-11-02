@@ -93,9 +93,9 @@ public class DetailPiutangLunas extends AppCompatActivity implements LoaderManag
             String tanggal = cursor.getString(tanggalColumnIndex);
             String status = cursor.getString(statusColumnIndex);
 
-            String jumlahUtang = "Rp " + jumlah + "";
-            mJumlah.setText(jumlahUtang);
-            mJumlahSisa.setText(jumlahUtang);
+            String jumlahPiutang = "Rp " + jumlah + "";
+            mJumlah.setText(jumlahPiutang);
+            mJumlahSisa.setText(jumlahPiutang);
             mNama.setText(nama);
             mDeskripsi.setText(deskripsi);
             mTanggal.setText(tanggal);

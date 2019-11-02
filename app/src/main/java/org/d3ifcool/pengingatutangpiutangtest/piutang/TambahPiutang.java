@@ -492,7 +492,11 @@ public class TambahPiutang extends AppCompatActivity implements TimePickerDialog
 
             // Setup up active buttons
             // Setup repeat switch
-            if (repeat.equals("false")) {
+            if (repeat == null){
+                mRepeatSwitch.setChecked(false);
+                mRepeatText.setText("off");
+            }
+            else if (repeat.equals("false")) {
                 mRepeatSwitch.setChecked(false);
                 mRepeatText.setText("Off");
 
@@ -529,6 +533,7 @@ public class TambahPiutang extends AppCompatActivity implements TimePickerDialog
         }
         mTimeText.setText(mTime);
     }
+
     public void saveReminder() {
 
      /*   if (mCurrentReminderUri == null ) {
@@ -579,21 +584,54 @@ public class TambahPiutang extends AppCompatActivity implements TimePickerDialog
         if (mCurrentPiutangUri == null) {
             // This is a NEW reminder, so insert a new reminder into the provider,
             // returning the content URI for the new reminder.
-            Uri newUri = getContentResolver().insert(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, values);
-
-            // Show a toast message depending on whether or not the insertion was successful.
-            if (newUri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_reminder_failed),
-                        Toast.LENGTH_SHORT).show();
+            if (mTitle == null){
+                Toast.makeText(TambahPiutang.this, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            } else if (mJum == null){
+                Toast.makeText(TambahPiutang.this, "Jumlah tidak boleh kosong", Toast.LENGTH_SHORT).show();
+            } else if (mDes == null){
+                Toast.makeText(TambahPiutang.this, "Deskripsi tidak boleh kosong", Toast.LENGTH_SHORT).show();
             } else {
-                // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_insert_reminder_successful),
-                        Toast.LENGTH_SHORT).show();
+                Uri newUri = getContentResolver().insert(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, values);
+
+                // Create a new notification
+                if (mActive.equals("true")) {
+                    if (mRepeat.equals("true")) {
+                        new AlarmScheduler().setRepeatAlarm(getApplicationContext(), selectedTimestamp, mCurrentPiutangUri, mRepeatTime);
+                    } else if (mRepeat.equals("false")) {
+                        new AlarmScheduler().setAlarm(getApplicationContext(), selectedTimestamp, mCurrentPiutangUri);
+                    }
+
+                    Toast.makeText(this, "Alarm time is " + selectedTimestamp,
+                            Toast.LENGTH_LONG).show();
+                }
+
+
+                // Show a toast message depending on whether or not the insertion was successful.
+                if (newUri == null) {
+                    // If the new content URI is null, then there was an error with insertion.
+                    Toast.makeText(this, getString(R.string.editor_insert_reminder_failed),
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    // Otherwise, the insertion was successful and we can display a toast.
+                    Toast.makeText(this, getString(R.string.editor_insert_reminder_successful),
+                            Toast.LENGTH_SHORT).show();
+                }
             }
         } else {
 
             int rowsAffected = getContentResolver().update(mCurrentPiutangUri, values, null, null);
+
+            // Create a new notification
+            if (mActive.equals("true")) {
+                if (mRepeat.equals("true")) {
+                    new AlarmScheduler().setRepeatAlarm(getApplicationContext(), selectedTimestamp, mCurrentPiutangUri, mRepeatTime);
+                } else if (mRepeat.equals("false")) {
+                    new AlarmScheduler().setAlarm(getApplicationContext(), selectedTimestamp, mCurrentPiutangUri);
+                }
+
+                Toast.makeText(this, "Alarm time is " + selectedTimestamp,
+                        Toast.LENGTH_LONG).show();
+            }
 
             // Show a toast message depending on whether or not the update was successful.
             if (rowsAffected == 0) {
@@ -606,23 +644,5 @@ public class TambahPiutang extends AppCompatActivity implements TimePickerDialog
                         Toast.LENGTH_SHORT).show();
             }
         }
-
-        // Create a new notification
-        if (mActive.equals("true")) {
-            if (mRepeat.equals("true")) {
-                new AlarmScheduler().setRepeatAlarm(getApplicationContext(), selectedTimestamp, mCurrentPiutangUri, mRepeatTime);
-            } else if (mRepeat.equals("false")) {
-                new AlarmScheduler().setAlarm(getApplicationContext(), selectedTimestamp, mCurrentPiutangUri);
-            }
-
-            Toast.makeText(this, "Alarm time is " + selectedTimestamp,
-                    Toast.LENGTH_LONG).show();
-        }
-
-        // Create toast to confirm new reminder
-        Toast.makeText(getApplicationContext(), "Saved",
-                Toast.LENGTH_SHORT).show();
-
     }
-
 }
