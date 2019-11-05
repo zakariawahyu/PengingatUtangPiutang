@@ -19,13 +19,17 @@ import org.d3ifcool.pengingatutangpiutangtest.piutang.DetailPiutang;
 import org.d3ifcool.pengingatutangpiutangtest.utang.DetailUtang;
 import org.d3ifcool.pengingatutangpiutangtest.utang.TambahUtang;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+
 public class ReminderAlarmService extends IntentService {
     private static final String TAG = ReminderAlarmService.class.getSimpleName();
 
     private static final int NOTIFICATION_ID = 42;
 
-    Cursor cursor;
-    private String description;
+    Cursor cursorku;
+    String nama, jumlah, jenis, formattedString;
+    Uri uriku;
 
     //This is a deep link intent, and needs the task stack
     public static PendingIntent getReminderPendingIntent(Context context, Uri uri) {
@@ -42,34 +46,52 @@ public class ReminderAlarmService extends IntentService {
     protected void onHandleIntent(Intent intent) {
 
         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Uri uri = intent.getData();
+        uriku = intent.getData();
 
         //Display a notification to view the task details
         Intent action = new Intent(this, DetailUtang.class);
-        action.setData(uri);
+        action.setData(uriku);
         PendingIntent operation = TaskStackBuilder.create(this)
                 .addNextIntentWithParentStack(action)
                 .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        if (uri != null) {
-            cursor = getContentResolver().query(uri, null, null, null, null);
+//        try {
+
+
+        if (uriku != null) {
+            cursorku = getContentResolver().query(uriku, null, null, null, null);
+
         }
-            String description = "";
-            try {
-                if (cursor != null && cursor.moveToFirst()) {
-                    description = UtangPiutangContract.getColumnString(cursor, UtangPiutangContract.UtangPiutangEntry.KEY_NAMA);
-                }
-            } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+
+
+
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+
+        try {
+
+            if (cursorku != null && cursorku.moveToFirst()) {
+                nama = UtangPiutangContract.getColumnString(cursorku, UtangPiutangContract.UtangPiutangEntry.KEY_NAMA);
+                jumlah = UtangPiutangContract.getColumnString(cursorku, UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH);
+                jenis = UtangPiutangContract.getColumnString(cursorku, UtangPiutangContract.UtangPiutangEntry.KEY_JENIS);
+
+                DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+                symbols.setDecimalSeparator(',');
+                symbols.setGroupingSeparator('.');
+                String pattern = "#,###,###";
+                DecimalFormat formatter = new DecimalFormat(pattern, symbols);
+                formattedString = formatter.format(Double.parseDouble(jumlah));
             }
-
-
+        } finally {
+            if (cursorku != null) {
+                cursorku.close();
+            }
+        }
 
         Notification note = new NotificationCompat.Builder(this)
                 .setContentTitle(getString(R.string.reminder_title))
-                .setContentText(description)
+                .setContentText("Anda mempunyai " +jenis+" Rp "+ formattedString + " dari " + nama)
                 .setSmallIcon(R.drawable.ic_add_alert_black_24dp)
                 .setContentIntent(operation)
                 .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })

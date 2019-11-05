@@ -66,12 +66,12 @@ public class UtangPiutangProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         mDbHelper = new UtangPiutangDbHelper(getContext());
-        return false;
+        return true;
     }
 
     @Nullable
     @Override
-    public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         SQLiteDatabase database = mDbHelper.getReadableDatabase();
 
         // This cursor will hold the result of the query
@@ -209,9 +209,8 @@ public class UtangPiutangProvider extends ContentProvider {
             return null;
         }
 
-        if (id != 0) {
-            getContext().getContentResolver().notifyChange(uri, null);
-        }
+        getContext().getContentResolver().notifyChange(uri, null);
+
 
         return ContentUris.withAppendedId(uri, id);
     }
@@ -268,7 +267,7 @@ public class UtangPiutangProvider extends ContentProvider {
     }
 
     @Override
-    public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
             case UTANG:

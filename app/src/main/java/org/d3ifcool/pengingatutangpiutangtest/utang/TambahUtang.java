@@ -101,8 +101,8 @@ public class TambahUtang extends AppCompatActivity implements TimePickerDialog.O
 
         btnsave = findViewById(R.id.btn_simpan_utang);
 
-        Intent intent = getIntent();
-        mCurrentUtangUri = intent.getData();
+        Intent intentk = getIntent();
+        mCurrentUtangUri = intentk.getData();
 
         if (mCurrentUtangUri == null) {
 
@@ -597,7 +597,7 @@ public class TambahUtang extends AppCompatActivity implements TimePickerDialog.O
             } else if (mDes == null){
                 Toast.makeText(TambahUtang.this, "Deskripsi tidak boleh kosong", Toast.LENGTH_SHORT).show();
             } else {
-                Uri newUri = getContentResolver().insert(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_UTANG, values);
+                Uri newUriku = getContentResolver().insert(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_UTANG, values);
 
                 // Create a new notification
                 if (mActive.equals("true")) {
@@ -607,13 +607,11 @@ public class TambahUtang extends AppCompatActivity implements TimePickerDialog.O
                         new AlarmScheduler().setAlarm(getApplicationContext(), selectedTimestamp, mCurrentUtangUri);
                     }
 
-                    Toast.makeText(this, "Alarm time is " + selectedTimestamp,
-                            Toast.LENGTH_LONG).show();
                 }
 
 
                 // Show a toast message depending on whether or not the insertion was successful.
-                if (newUri == null) {
+                if (newUriku == null) {
                     // If the new content URI is null, then there was an error with insertion.
                     Toast.makeText(this, getString(R.string.editor_insert_reminder_failed),
                             Toast.LENGTH_SHORT).show();
@@ -625,7 +623,7 @@ public class TambahUtang extends AppCompatActivity implements TimePickerDialog.O
             }
         } else {
 
-            int rowsAffected = getContentResolver().update(mCurrentUtangUri, values, null, null);
+            int rowsAffectedku = getContentResolver().update(mCurrentUtangUri, values, null, null);
 
             // Create a new notification
             if (mActive.equals("true")) {
@@ -634,13 +632,10 @@ public class TambahUtang extends AppCompatActivity implements TimePickerDialog.O
                 } else if (mRepeat.equals("false")) {
                     new AlarmScheduler().setAlarm(getApplicationContext(), selectedTimestamp, mCurrentUtangUri);
                 }
-
-                Toast.makeText(this, "Alarm time is " + selectedTimestamp,
-                        Toast.LENGTH_LONG).show();
             }
 
             // Show a toast message depending on whether or not the update was successful.
-            if (rowsAffected == 0) {
+            if (rowsAffectedku == 0) {
                 // If no rows were affected, then there was an error with the update.
                 Toast.makeText(this, getString(R.string.editor_update_reminder_failed),
                         Toast.LENGTH_SHORT).show();

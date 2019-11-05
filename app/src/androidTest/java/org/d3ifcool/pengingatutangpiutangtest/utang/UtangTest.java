@@ -10,42 +10,40 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import static org.hamcrest.Matchers.anything;
 import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class UtangTest {
-    private String nama;
-    private String jumlahutang;
-    private String deskirpsi;
 
     @Rule
     public ActivityTestRule<Utang> mActivityTestRule =
             new ActivityTestRule<>(Utang.class);
-    @Before
-    public void isi(){
-        nama = "Zakaria";
-        jumlahutang = "25000";
-        deskirpsi = "Makan sate ayam";
+
+    @Test
+    public void UtangTest(){
+
     }
 
     @Test
-    public void tambahUtang(){
-        onView(withId(R.id.fb_add_utang)).perform(click());
-        onView(withId(R.id.et_nama_utang)).perform(typeText(nama));
-        closeSoftKeyboard();
-        onView(withId(R.id.et_jmlutang)).perform(typeText(jumlahutang));
-        closeSoftKeyboard();
-        onView(withId(R.id.et_deskripsi_utang)).perform(typeText(deskirpsi));
-        closeSoftKeyboard();
-        onView(withId(R.id.btn_simpan_utang)).perform(scrollTo()).perform(click());
+    public void PembayaranLunasTest(){
+        onView(withId(R.id.list_utang)).check(matches(isDisplayed()));
+        onData(anything()).inAdapterView(withId(R.id.list_utang)).atPosition(0).perform(click());
+        onView(withId(R.id.btn_lunas_utang)).perform(click());
+        onView(withId(R.id.btn_bayar_utang)).perform(scrollTo()).perform(click());
     }
+
+
 
 }
