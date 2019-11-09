@@ -32,10 +32,13 @@ import org.d3ifcool.pengingatutangpiutangtest.reminder.AlarmScheduler;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 
+
 public class DetailUtang extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private boolean mHasChanged;
     private Uri mCurrentUtangUri;
+    private static final int EXISTING_UTANG_LOADER = 0;
+
     private TextView mJumlah, mJumlahSisa, mCatatanUtang, mNama, mDeskripsi, mTanggal, mStatus;
     private Button btnCicilUtang, btnLunasUtang, btnBayarUtang;
     private EditText etJumlahBayar;
@@ -44,10 +47,6 @@ public class DetailUtang extends AppCompatActivity implements LoaderManager.Load
     private String mSat = "Belum Lunas";
     private int id;
     private String formattedString;
-
-
-    private static final int EXISTING_UTANG_LOADER = 0;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,6 @@ public class DetailUtang extends AppCompatActivity implements LoaderManager.Load
         mTanggal = findViewById(R.id.tv_tanggal_detail_utang);
         mStatus = findViewById(R.id.tv_status_detail_utang);
 
-
         etJumlahBayar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -99,7 +97,7 @@ public class DetailUtang extends AppCompatActivity implements LoaderManager.Load
                     String pattern = "#,###,###";
                     DecimalFormat formatter = new DecimalFormat(pattern, symbols);
                     String formattedStringku = formatter.format(doubleval);
-                    mJum = formattedStringku.replace(".","");
+                    mJum = formattedStringku.replace(".","");;
                     etJumlahBayar.setText(formattedStringku);
                     etJumlahBayar.setSelection(etJumlahBayar.getText().length());
                 } catch (NumberFormatException nfe) {
@@ -115,7 +113,6 @@ public class DetailUtang extends AppCompatActivity implements LoaderManager.Load
             }
         });
 
-
     }
 
     @Override
@@ -128,6 +125,7 @@ public class DetailUtang extends AppCompatActivity implements LoaderManager.Load
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
         switch (item.getItemId()) {
+
             case R.id.edit:
                 i = new Intent(DetailUtang.this, TambahUtang.class);
 
@@ -159,6 +157,125 @@ public class DetailUtang extends AppCompatActivity implements LoaderManager.Load
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
+    }
+
+    private void showDeleteConfirmationDialog() {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the postivie and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Delete catatan ini ?");
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Delete" button, so delete the reminder.
+                deleteReminder();
+            }
+        });
+        builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Cancel" button, so dismiss the dialog
+                // and continue editing the reminder.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteReminder() {
+        // Only perform the delete if this is an existing reminder.
+        if (mCurrentUtangUri != null) {
+            // Call the ContentResolver to delete the reminder at the given content URI.
+            // Pass in null for the selection and selection args because the mCurrentreminderUri
+            // content URI already identifies the reminder that we want.
+            int rowsDeleted = getContentResolver().delete(mCurrentUtangUri, null, null);
+
+            // Show a toast message depending on whether or not the delete was successful.
+            if (rowsDeleted == 0) {
+                // If no rows were deleted, then there was an error with the delete.
+                Toast.makeText(this, getString(R.string.editor_delete_reminder_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the delete was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_delete_reminder_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        // Close the activity
+        finish();
+    }
+
+    public void btnCicilUtang(View view) {
+        btnCicilUtang.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
+        btnLunasUtang.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
+        mCatatanUtang.setText("Pinjaman ini dibayar dengan cara cicilan");
+        etJumlahBayar.setText("");
+        mJumlahSisa.setText("Rp " + formattedString + "");
+        mStatus.setText("Belum Lunas");
+        mSat = "Belum Lunas";
+    }
+
+    public void btnLunasUtang(View view) {
+        btnLunasUtang.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
+        btnCicilUtang.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
+        mCatatanUtang.setText("Pinjaman ini dibayar dengan cara lunas");
+        mJumlahSisa.setText("Rp 0");
+        etJumlahBayar.setText(jumlah);
+        mStatus.setText("Lunas");
+        mSat = "Lunas";
+    }
+
+    public void bayarUtang(View view) {
+        try {
+
+            int etjum = Integer.parseInt(mJum);
+            int totjum = Integer.parseInt(jumlah);
+
+            if (etjum > totjum) {
+                Toast.makeText(DetailUtang.this, "Jumlah tidak boleh melebihi jumlah utang", Toast.LENGTH_SHORT).show();
+            } else {
+                bayarUtangku();
+            }
+
+        } catch (NumberFormatException e) {
+            Toast.makeText(DetailUtang.this, "Jumlah tidak boleh kosong", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    public void bayarUtangku() {
+
+        int mJumku = Integer.parseInt(mJum);
+        int jumlahku = Integer.parseInt(jumlah);
+
+        int bayarku = jumlahku - mJumku;
+
+        ContentValues values = new ContentValues();
+
+        values.put(UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH, bayarku);
+        values.put(UtangPiutangContract.UtangPiutangEntry.KEY_STATUS, mSat);
+
+        int rowsAffected = getContentResolver().update(mCurrentUtangUri, values, null, null);
+
+        new AlarmScheduler().cancelAlarm(getApplicationContext(), mCurrentUtangUri);
+
+        // Show a toast message depending on whether or not the update was successful.
+        if (rowsAffected == 0) {
+            // If no rows were affected, then there was an error with the update.
+            Toast.makeText(this, "Gagal melakukan pembayaran",
+                    Toast.LENGTH_SHORT).show();
+        } else {
+            // Otherwise, the update was successful and we can display a toast.
+            Toast.makeText(this, "Berhasil melakukan pembayaran",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        finish();
 
     }
 
@@ -230,127 +347,8 @@ public class DetailUtang extends AppCompatActivity implements LoaderManager.Load
         }
     }
 
-    private void showDeleteConfirmationDialog() {
-        // Create an AlertDialog.Builder and set the message, and click listeners
-        // for the postivie and negative buttons on the dialog.
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Delete catatan ini ?");
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Delete" button, so delete the reminder.
-                deleteReminder();
-            }
-        });
-        builder.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                // User clicked the "Cancel" button, so dismiss the dialog
-                // and continue editing the reminder.
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-            }
-        });
-
-        // Create and show the AlertDialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void deleteReminder() {
-        // Only perform the delete if this is an existing reminder.
-        if (mCurrentUtangUri != null) {
-            // Call the ContentResolver to delete the reminder at the given content URI.
-            // Pass in null for the selection and selection args because the mCurrentreminderUri
-            // content URI already identifies the reminder that we want.
-            int rowsDeleted = getContentResolver().delete(mCurrentUtangUri, null, null);
-
-            new AlarmScheduler().cancelAlarm(getApplicationContext(), mCurrentUtangUri);
-
-            // Show a toast message depending on whether or not the delete was successful.
-            if (rowsDeleted == 0) {
-                // If no rows were deleted, then there was an error with the delete.
-                Toast.makeText(this, getString(R.string.editor_delete_reminder_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the delete was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_delete_reminder_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-
-        // Close the activity
-        finish();
-    }
-
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
-    }
-
-    public void btnCicilUtang(View view) {
-        btnCicilUtang.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
-        btnLunasUtang.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
-        mCatatanUtang.setText("Pinjaman ini dibayar dengan cara cicilan");
-        etJumlahBayar.setText("");
-        mJumlahSisa.setText("Rp " + formattedString + "");
-        mStatus.setText("Belum Lunas");
-        mSat = "Belum Lunas";
-    }
-
-    public void btnLunasUtang(View view) {
-        btnLunasUtang.setBackground(this.getResources().getDrawable(R.drawable.btnpembayaranselected));
-        btnCicilUtang.setBackground(this.getResources().getDrawable(R.drawable.bgbtnpembayaran));
-        mCatatanUtang.setText("Pinjaman ini dibayar dengan cara lunas");
-        mJumlahSisa.setText("Rp 0");
-        etJumlahBayar.setText(jumlah);
-        mStatus.setText("Lunas");
-        mSat = "Lunas";
-    }
-
-    public void bayarUtang(View view) {
-        try {
-
-            int etjum = Integer.parseInt(mJum);
-            int totjum = Integer.parseInt(jumlah);
-
-            if (etjum > totjum) {
-                Toast.makeText(DetailUtang.this, "Jumlah tidak boleh melebihi jumlah utang", Toast.LENGTH_SHORT).show();
-            } else {
-                bayarUtangku();
-            }
-
-        } catch (NumberFormatException e) {
-            Toast.makeText(DetailUtang.this, "Jumlah tidak boleh kosong", Toast.LENGTH_SHORT).show();
-        }
-
-    }
-
-    public void bayarUtangku() {
-
-        int mJumku = Integer.parseInt(mJum);
-        int jumlahku = Integer.parseInt(jumlah);
-
-        int bayarku = jumlahku - mJumku;
-
-        ContentValues values = new ContentValues();
-
-        values.put(UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH, bayarku);
-        values.put(UtangPiutangContract.UtangPiutangEntry.KEY_STATUS, mSat);
-
-        int rowsAffected = getContentResolver().update(mCurrentUtangUri, values, null, null);
-
-        // Show a toast message depending on whether or not the update was successful.
-        if (rowsAffected == 0) {
-            // If no rows were affected, then there was an error with the update.
-            Toast.makeText(this, "Gagal melakukan pembayaran",
-                    Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the update was successful and we can display a toast.
-            Toast.makeText(this, "Berhasil melakukan pembayaran",
-                    Toast.LENGTH_SHORT).show();
-        }
-
-        finish();
 
     }
 }

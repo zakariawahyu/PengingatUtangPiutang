@@ -590,9 +590,9 @@ public class TambahUtang extends AppCompatActivity implements TimePickerDialog.O
         if (mCurrentUtangUri == null) {
             // This is a NEW reminder, so insert a new reminder into the provider,
             // returning the content URI for the new reminder.
-            if (mTitle == null){
+            if (mTitle == null ){
                 Toast.makeText(TambahUtang.this, "Nama tidak boleh kosong", Toast.LENGTH_SHORT).show();
-            } else if (mJum == null){
+            } else if (mJum == null ){
                 Toast.makeText(TambahUtang.this, "Jumlah tidak boleh kosong", Toast.LENGTH_SHORT).show();
             } else if (mDes == null){
                 Toast.makeText(TambahUtang.this, "Deskripsi tidak boleh kosong", Toast.LENGTH_SHORT).show();

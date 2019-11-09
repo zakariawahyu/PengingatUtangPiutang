@@ -11,7 +11,7 @@
         android:outlineAmbientShadowColor="@color/colorPrimaryDark"
         android:id="@+id/home_utang"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -72,7 +72,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/home_piutang"
         android:layout_width="match_parent"
-        android:layout_height="125dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"

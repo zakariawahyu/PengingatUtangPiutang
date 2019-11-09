@@ -15,24 +15,25 @@
 
     <RelativeLayout
         android:id="@+id/empty_view_utanglunas"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
+        android:layout_marginTop="75dp">
 
         <TextView
+            android:gravity="center_horizontal"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/lottie_utanglunas"
-            android:layout_marginTop="-90dp"
             android:text="Data masih kosong"
             android:textAlignment="center"
             android:textSize="18sp" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_utanglunas"
-            android:layout_width="255dp"
+            android:layout_width="match_parent"
             android:layout_height="255dp"
-            android:layout_margin="85dp"
+            android:layout_marginRight="85dp"
+            android:layout_marginLeft="85dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

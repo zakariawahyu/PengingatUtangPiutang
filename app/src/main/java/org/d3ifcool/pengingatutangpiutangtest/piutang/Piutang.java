@@ -2,6 +2,7 @@ package org.d3ifcool.pengingatutangpiutangtest.piutang;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NavUtils;
+import androidx.fragment.app.FragmentManager;
 
 import android.app.LoaderManager;
 import android.content.ContentUris;
@@ -22,55 +23,42 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import org.d3ifcool.pengingatutangpiutangtest.R;
 import org.d3ifcool.pengingatutangpiutangtest.data.UtangPiutangContract;
 import org.d3ifcool.pengingatutangpiutangtest.utang.DetailUtang;
+import org.d3ifcool.pengingatutangpiutangtest.utang.DetailUtangFragment;
 import org.d3ifcool.pengingatutangpiutangtest.utang.Utang;
 import org.d3ifcool.pengingatutangpiutangtest.utang.UtangCursorAdapter;
+import org.d3ifcool.pengingatutangpiutangtest.utang.UtangFragment;
 
-public class Piutang extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+public class Piutang extends AppCompatActivity {
+
     private boolean mHasChangedPiutang = false;
-    FloatingActionButton floatingActionButton;
-
-    View emptyViewPiutang;
-    ListView listViewPiutang;
-    PiutangCursorAdapter mCursorAdapterPiutang;
-
-    private static final int PIUTANG_LOADER = 0;
+    private boolean isDualPnae;
+    private FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_piutang);
 
-        listViewPiutang = findViewById(R.id.list_piutang);
-        emptyViewPiutang = findViewById(R.id.empty_view_piutang);
-        listViewPiutang.setEmptyView(emptyViewPiutang);
+        fragmentManager = getSupportFragmentManager();
 
-        mCursorAdapterPiutang = new PiutangCursorAdapter(this, null);
-        listViewPiutang.setAdapter(mCursorAdapterPiutang);
+        if (findViewById(R.id.detailcontainerPiutang) != null){
+            isDualPnae = true;
+        } else {
+            isDualPnae = false;
+        }
 
-        listViewPiutang.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(Piutang.this, DetailPiutang.class);
+        if (savedInstanceState == null ){
+            fragmentManager.beginTransaction()
+                    .add(R.id.containerPiutang, new PiutangFragment())
+                    .commit();
+        }
 
-                Uri currentPiutangkuUri = ContentUris.withAppendedId(UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG, id);
+        if (isDualPnae){
+            fragmentManager.beginTransaction()
+                    .replace(R.id.detailcontainerPiutang, new DetailPiutangFragment())
+                    .commit();
+        }
 
-                // Set the URI on the data field of the intent
-                intent.setData(currentPiutangkuUri);
-
-                startActivity(intent);
-            }
-        });
-
-        floatingActionButton = findViewById(R.id.fb_add_piutang);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Piutang.this, TambahPiutang.class);
-                startActivity(i);
-            }
-        });
-
-        getLoaderManager().initLoader(PIUTANG_LOADER, null, this);
     }
 
     @Override
@@ -98,41 +86,5 @@ public class Piutang extends AppCompatActivity implements LoaderManager.LoaderCa
                 break;
         }
         return true;
-    }
-
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection = {
-                UtangPiutangContract.UtangPiutangEntry._ID,
-                UtangPiutangContract.UtangPiutangEntry.KEY_NAMA,
-                UtangPiutangContract.UtangPiutangEntry.KEY_JUMLAH,
-                UtangPiutangContract.UtangPiutangEntry.KEY_DESKRIPSI,
-                UtangPiutangContract.UtangPiutangEntry.KEY_DATE,
-                UtangPiutangContract.UtangPiutangEntry.KEY_TIME,
-                UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT,
-                UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_NO,
-                UtangPiutangContract.UtangPiutangEntry.KEY_REPEAT_TYPE,
-                UtangPiutangContract.UtangPiutangEntry.KEY_ACTIVE,
-                UtangPiutangContract.UtangPiutangEntry.KEY_JENIS,
-                UtangPiutangContract.UtangPiutangEntry.KEY_STATUS
-
-        };
-
-        return new CursorLoader(this,   // Parent activity context
-                UtangPiutangContract.UtangPiutangEntry.CONTENT_URI_PIUTANG,   // Provider content URI to query
-                projection,             // Columns to include in the resulting Cursor
-                null,                   // No selection clause
-                null,                   // No selection arguments
-                null);
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursorAdapterPiutang.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapterPiutang.swapCursor(null);
     }
 }

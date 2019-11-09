@@ -1,75 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/containerPiutang"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".piutang.Piutang">
 
-    <ListView
-        android:id="@+id/list_piutang"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp">
-    </ListView>
 
-    <RelativeLayout
-        android:id="@+id/empty_view_piutang"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/lottiepiutang"
-            android:layout_marginTop="-90dp"
-            android:text="Data masih kosong"
-            android:textAlignment="center"
-            android:textSize="18sp" />
-
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/lottiepiutang"
-            android:layout_width="255dp"
-            android:layout_height="255dp"
-            android:layout_margin="85dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:lottie_autoPlay="true"
-            app:lottie_fileName="629-empty-box.json"
-            app:lottie_loop="true" />
-
-    </RelativeLayout>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/bar_piutang"
-            style="@style/Widget.MaterialComponents.BottomAppBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:fabCradleRoundedCornerRadius="16dp"
-            app:backgroundTint="@color/design_default_color_primary"
-            app:fabAlignmentMode="center"
-            >
-
-        </com.google.android.material.bottomappbar.BottomAppBar>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fb_add_piutang"
-            app:fabSize="normal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_circle_outline_black_24dp"
-            app:backgroundTint="@color/design_default_color_primary_dark"
-            app:elevation="0dp"
-            app:layout_anchor="@+id/bar_piutang"
-
-            />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-</RelativeLayout>
+</FrameLayout>
